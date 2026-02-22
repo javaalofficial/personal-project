@@ -1,6 +1,8 @@
 const canvas = document.getElementById('Game')
 const menggambar = canvas.getContext('2d')
 
+//gerak dasar pemain
+
 const keyboard = { up: false, down: false, right: false, left: false, shoot: false, dodge: false};
 
 window.addEventListener('keydown', (e) => {
@@ -21,14 +23,16 @@ window.addEventListener('keyup', (e) => {
     if (e.key === 'Alt') keyboard.dodge = false; 
 });
 
-const pemain = {
-    x: 100,
-    y: 100,
-    w: 100,
-    h: 100,
+// obyek
+
+const latar = {
+    x: 0,
+    y: 0,
+    w: canvas.width,
+    h: canvas.height,
     gambar: new Image(),
     load() {
-        this.gambar.src = 'asset/PNG/playerShip1_blue.png';
+        this.gambar.src = 'asset/Backgrounds/black.png';
         this.gambar.onload = () => {
             ulangin();
         };
@@ -38,16 +42,47 @@ const pemain = {
 }
 };
 
+const pemain = {
+    x: 100,
+    y: 100,
+    w: 50,
+    h: 50,
+    gambar: new Image(),
+    load() {
+        this.gambar.src = 'asset/PNG/playerShip1_blue.png';
+        this.gambar.onload = () => {
+            ulangin();
+        };
+    },
+    gambarin(){
+        menggambar.drawImage(this.gambar, this.x, this.y, this.w, this.h);
+    },
+    clamp(){
+        if (this.x < 0) this.x = 0;
+        if (this.x + this.w > canvas.width) this.x = canvas.width - this.w;
+        if (this.y < 0) this.y = 0;
+        if (this.y + this.w > canvas.height) this.y = canvas.height - this.w;
+    }
+
+};
+
+//update
+
 function terbaru (){
-    if (keyboard.up) pemain.y -= 1;
-    if (keyboard.down) pemain.y += 1;
-    if (keyboard.right) pemain.x += 1;
-    if (keyboard.left) pemain.x -= 1;
-    
+    if (keyboard.up) pemain.y -= 10;
+    if (keyboard.down) pemain.y += 10;
+    if (keyboard.right) pemain.x += 10;
+    if (keyboard.left) pemain.x -= 10;
+
+    pemain.clamp()
 }
+
+
+// loop
 
 function hapusLagi (){
     menggambar.clearRect(0,0, canvas.width, canvas.height)
+    latar.gambarin()
     pemain.gambarin()
 }
 
@@ -57,6 +92,9 @@ function ulangin (){
     requestAnimationFrame(ulangin)
 }
 
+//menjalankan object
+
 pemain.load()
+latar.load()
 
 
