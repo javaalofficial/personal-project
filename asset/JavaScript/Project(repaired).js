@@ -10,6 +10,7 @@ window.addEventListener('keydown', (e) => {
     if (e.key === 'ArrowDown') click.down = true;
     if (e.key === 'ArrowRight') click.right = true;
     if (e.key === 'ArrowLeft') click.left = true;
+    if (e.key === ' ') {jumlahPeluru.push( new Peluru(pemain.x + pemain.w / 2, pemain.y))}
 })
 window.addEventListener('keyup', (e) => {
     if (e.key === 'ArrowUp') click.up = false;
@@ -21,28 +22,28 @@ window.addEventListener('keyup', (e) => {
 //pemain
 
 class Pemain {
-    constructor(call){
+    constructor(){
         this.w = 50;
         this.h = 50;
         this.x = canvas.width / 2 - this.w / 2;
         this.y = canvas.height - this.h;
         this.speed = 5;
-        this.direction = 1;
         this.picture = new Image();
         this.picture.src = 'asset/PNG/playerShip1_blue.png'
-        this.picture.onload = call;
     };
 
-// update
+    // update
 
     terbaru(){
-        if (click.up) this.y -= (this.speed*this.direction);
-        if (click.down) this.y += (this.speed*this.direction);
-        if (click.right) this.x += (this.speed*this.direction);
-        if (click.left) this.x -= (this.speed*this.direction);
+        if (click.up) this.y -= this.speed;
+        if (click.down) this.y += this.speed;
+        if (click.right) this.x += this.speed;
+        if (click.left) this.x -= this.speed;
 
         this.clamp()
     };
+
+    //clamp
 
     clamp(){
         if (this.x < 0) this.x = 0;
@@ -51,7 +52,29 @@ class Pemain {
         if (this.y + this.h > canvas.height) this.y = canvas.height - this.h;
     };
 
+    //draw
+
     draw() {
+        drawing.drawImage(this.picture, this.x, this.y, this.w, this.h)
+    }
+}
+
+//peluru
+
+class Peluru {
+    constructor(x, y) {
+        this.x = x;
+        this.y = y;
+        this. w = 2;
+        this.h = 5;
+        this.speed = 8;
+        this.picture = new Image()
+        this.picture.src = 'asset/PNG/Lasers/laserBlue01.png'
+    }
+    terbaru(){
+        this.y -= this.speed;
+    }
+    draw(){
         drawing.drawImage(this.picture, this.x, this.y, this.w, this.h)
     }
 }
@@ -63,28 +86,52 @@ const latar = {
     y: 0,
     w: canvas.width,
     h: canvas.height,
-    load(){
-    this.picture = new Image();
-
-    this.picture.src = 'asset/Backgrounds/blue.png'
-        this.picture.onload = () => {
-        pengulangan();
-    };
-    },
+    picture: new Image(),
     draw() {
-        drawing.drawImage(this.picture, this.x, this.y, this.w, this.h);
-    }
+    drawing.drawImage(this.picture, this.x, this.y, this.w, this.h)
+    },
+};
+
+latar.picture.src = 'asset/Backgrounds/blue.png';
+
+//instance
+let jumlahPeluru = [];
+let pemain = new Pemain();
+//Asset
+
+let assetDimuat = 0;
+const jumlahAsset = 2;
+
+function assetSiap() {
+    assetDimuat++;
+    if (assetDimuat === jumlahAsset) {mulaiGame()};
 }
 
-let ulang = false;
+pemain.picture.onload = assetSiap;
+latar.picture.onload = assetSiap;
+
+function mulaiGame() {
+    requestAnimationFrame(pengulangan)
+}
+
+//loop
 
 function pengulangan(){
-    if (!ulang) ulang = true;
     drawing.clearRect(0, 0, canvas.width, canvas.height);
-    latar.load();  
+    latar.draw();
     pemain.terbaru();
     pemain.draw();
+
+    for (let i = jumlahPeluru.length - 1; i >= 0; i--) {
+        const peluru = jumlahPeluru[i];
+    
+    peluru.terbaru();
+    peluru.draw();
+
+    if (peluru.y < 0) {
+        jumlahPeluru.splice(i, 1);
+    }
+    }
+
     requestAnimationFrame(pengulangan);
 }
-
-let pemain = new Pemain(pengulangan);
