@@ -10,7 +10,7 @@ window.addEventListener('keydown', (e) => {
     if (e.key === 'ArrowDown') click.down = true;
     if (e.key === 'ArrowRight') click.right = true;
     if (e.key === 'ArrowLeft') click.left = true;
-    if (e.key === ' ') {jumlahPeluru.push( new Peluru(pemain.x + pemain.w / 2, pemain.y))}
+    if (e.key === ' ') {jumlahPeluru.push( new Peluru(pemain.x + pemain.w /2 - peluru.w /2, pemain.y))}
 })
 window.addEventListener('keyup', (e) => {
     if (e.key === 'ArrowUp') click.up = false;
@@ -65,8 +65,8 @@ class Peluru {
     constructor(x, y) {
         this.x = x;
         this.y = y;
-        this. w = 2;
-        this.h = 5;
+        this. w = 5;
+        this.h = 10;
         this.speed = 8;
         this.picture = new Image()
         this.picture.src = 'asset/PNG/Lasers/laserBlue01.png'
@@ -78,7 +78,6 @@ class Peluru {
         drawing.drawImage(this.picture, this.x, this.y, this.w, this.h)
     }
 }
-
 //latar
 
 const latar = {
@@ -95,8 +94,36 @@ const latar = {
 latar.picture.src = 'asset/Backgrounds/blue.png';
 
 //instance
+let peluru = new Peluru;
 let jumlahPeluru = [];
 let pemain = new Pemain();
+
+//peluru
+
+function peluruNabrak(peluru, objek) {
+    return (
+        peluru.x < objek.x + objek.w &&
+        peluru.x + peluru.w > objek.x &&
+        peluru.y < objek.y + objek.h &&
+        peluru.y + peluru.h > objek.y
+        
+    )
+}
+
+function peluruTerbaru(){
+for (let i = jumlahPeluru.length - 1; i >= 0; i--){
+            jumlahPeluru[i].terbaru();
+        };
+        if (peluru.h + peluru.y > 0){
+        jumlahPeluru.splice(i, 1);
+        }
+    }
+function peluruDraw(){
+    for (let peluruIni of jumlahPeluru){
+        peluruIni.draw();
+    }
+}
+
 //Asset
 
 let assetDimuat = 0;
@@ -116,22 +143,38 @@ function mulaiGame() {
 
 //loop
 
-function pengulangan(){
+
+function terbaruTotal(){
+    pemain.terbaru();
+    peluruTerbaru();
+    // peluruNabrak();
+}
+
+function drawTotal(){
     drawing.clearRect(0, 0, canvas.width, canvas.height);
     latar.draw();
-    pemain.terbaru();
     pemain.draw();
+    peluruDraw();
+}
 
-    for (let i = jumlahPeluru.length - 1; i >= 0; i--) {
-        const peluru = jumlahPeluru[i];
+function pengulangan(){
+    terbaruTotal();
+    drawTotal();
+    // drawing.clearRect(0, 0, canvas.width, canvas.height);
+    // latar.draw();
+    // pemain.terbaru();
+    // pemain.draw();
+
+    // for (let i = jumlahPeluru.length - 1; i >= 0; i--) {
+    //     const peluru = jumlahPeluru[i];
     
-    peluru.terbaru();
-    peluru.draw();
+    // peluru.terbaru();
+    // peluru.draw();
 
-    if (peluru.y < 0) {
-        jumlahPeluru.splice(i, 1);
-    }
-    }
+    // if (peluru.y < 0) {
+    //     jumlahPeluru.splice(i, 1);
+    // }
+    // }
 
     requestAnimationFrame(pengulangan);
 }
