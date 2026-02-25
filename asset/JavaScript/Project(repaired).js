@@ -10,7 +10,7 @@ window.addEventListener('keydown', (e) => {
     if (e.key === 'ArrowDown') click.down = true;
     if (e.key === 'ArrowRight') click.right = true;
     if (e.key === 'ArrowLeft') click.left = true;
-    if (e.key === ' ') {jumlahPeluru.push( new Peluru(pemain.x + pemain.w /2 - peluru.w /2, pemain.y))}
+    if (e.key === ' ') {jumlahPeluru.push( new Peluru(pemain.x + pemain.w /2 - 2.5, pemain.y))}
 })
 window.addEventListener('keyup', (e) => {
     if (e.key === 'ArrowUp') click.up = false;
@@ -27,7 +27,7 @@ class Pemain {
         this.h = 50;
         this.x = canvas.width / 2 - this.w / 2;
         this.y = canvas.height - this.h;
-        this.speed = 5;
+        this.speed = 10;
         this.picture = new Image();
         this.picture.src = 'asset/PNG/playerShip1_blue.png'
     };
@@ -66,8 +66,8 @@ class Peluru {
         this.x = x;
         this.y = y;
         this. w = 5;
-        this.h = 10;
-        this.speed = 8;
+        this.h = 15;
+        this.speed = 15;
         this.picture = new Image()
         this.picture.src = 'asset/PNG/Lasers/laserBlue01.png'
     }
@@ -78,6 +78,28 @@ class Peluru {
         drawing.drawImage(this.picture, this.x, this.y, this.w, this.h)
     }
 }
+
+//musuh
+
+class Musuh {
+    constructor(x, y){
+        this.x = 10;
+        this.y = 10;
+        this.h = 50;
+        this.w = 50;
+        this.speed = 10;
+        this.picture = new Image();
+        this.picture.src = 'asset/PNG/Enemies/enemyBlack1.png'
+    }
+    terbaru(){
+        this.y += this.speed
+    }
+    draw(){
+        musuh.terbaru();
+        drawing.drawImage(this.picture, this.x, this.y, this.w, this.h)
+    }
+}
+
 //latar
 
 const latar = {
@@ -94,9 +116,9 @@ const latar = {
 latar.picture.src = 'asset/Backgrounds/blue.png';
 
 //instance
-let peluru = new Peluru;
 let jumlahPeluru = [];
 let pemain = new Pemain();
+let musuh = new Musuh();
 
 //peluru
 
@@ -112,12 +134,29 @@ function peluruNabrak(peluru, objek) {
 
 function peluruTerbaru(){
 for (let i = jumlahPeluru.length - 1; i >= 0; i--){
-            jumlahPeluru[i].terbaru();
-        };
-        if (peluru.h + peluru.y > 0){
+    let p = jumlahPeluru[i];
+    p.terbaru();
+
+        if (p.h + p.y < 0){
         jumlahPeluru.splice(i, 1);
         }
     }
+}
+// // function peluruTerbaru() {
+//     for (let i = jumlahPeluru.length - 1; i >= 0; i--) {
+//         // Kita ambil peluru yang spesifik sedang dihitung (index ke-i)
+//         let p = jumlahPeluru[i]; 
+        
+//         p.terbaru();
+
+//         // Cek apakah peluru spesifik ini (p) sudah keluar layar atas
+//         // Kita pakai p.y dan p.h (milik objek di dalam array)
+//         if (p.y + p.h < 0) {
+//             jumlahPeluru.splice(i, 1);
+//         }
+//     }
+// }
+
 function peluruDraw(){
     for (let peluruIni of jumlahPeluru){
         peluruIni.draw();
@@ -147,7 +186,6 @@ function mulaiGame() {
 function terbaruTotal(){
     pemain.terbaru();
     peluruTerbaru();
-    // peluruNabrak();
 }
 
 function drawTotal(){
@@ -155,26 +193,11 @@ function drawTotal(){
     latar.draw();
     pemain.draw();
     peluruDraw();
+    musuh.draw()
 }
 
 function pengulangan(){
     terbaruTotal();
     drawTotal();
-    // drawing.clearRect(0, 0, canvas.width, canvas.height);
-    // latar.draw();
-    // pemain.terbaru();
-    // pemain.draw();
-
-    // for (let i = jumlahPeluru.length - 1; i >= 0; i--) {
-    //     const peluru = jumlahPeluru[i];
-    
-    // peluru.terbaru();
-    // peluru.draw();
-
-    // if (peluru.y < 0) {
-    //     jumlahPeluru.splice(i, 1);
-    // }
-    // }
-
     requestAnimationFrame(pengulangan);
 }
