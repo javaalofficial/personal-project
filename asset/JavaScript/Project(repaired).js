@@ -1,5 +1,7 @@
 const canvas = document.getElementById('Game');
+/** @type {CanvasRenderingContext2D}*/
 const drawing = canvas.getContext('2d');
+
 
 //movement
 
@@ -137,6 +139,7 @@ latar.picture.src = 'asset/Backgrounds/blue.png';
 let jumlahPeluru = [];
 let pemain = new Pemain();
 let jumlahMusuh = [];
+let skorPemain = 0;
 
 //peluru
 
@@ -159,10 +162,13 @@ for (let p = jumlahPeluru.length - 1; p >= 0; p--){
         let musuh = jumlahMusuh[m]
 
         if (peluruNabrak(peluruBaru, musuh)){
-            console.log('kok gak meledak?');
+            console.log('total skor:' + skorPemain );
 
             jumlahMusuh.splice(m, 1)
             jumlahPeluru.splice(p, 1)
+
+            skorPemain += 100;
+
             break;
         }
     }
@@ -171,25 +177,17 @@ for (let p = jumlahPeluru.length - 1; p >= 0; p--){
         }
     }
 }
-// // function peluruTerbaru() {
-//     for (let i = jumlahPeluru.length - 1; i >= 0; i--) {
-//         // Kita ambil peluru yang spesifik sedang dihitung (index ke-i)
-//         let p = jumlahPeluru[i]; 
-        
-//         p.terbaru();
-
-//         // Cek apakah peluru spesifik ini (p) sudah keluar layar atas
-//         // Kita pakai p.y dan p.h (milik objek di dalam array)
-//         if (p.y + p.h < 0) {
-//             jumlahPeluru.splice(i, 1);
-//         }
-//     }
-// }
 
 function peluruDraw(){
     for (let peluruIni of jumlahPeluru){
         peluruIni.draw();
     }
+}
+
+function skorDraw(){
+    drawing.fillStyle = 'white';
+    drawing.font = 'arial 24px';
+    drawing.fillText ('skor = ' + skorPemain, 30, 10, 1000) 
 }
 
 //Asset
@@ -224,6 +222,7 @@ function drawTotal(){
     pemain.draw();
     peluruDraw();
     musuhDraw();
+    skorDraw();
 }
 
 function pengulangan(){
