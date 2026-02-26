@@ -108,13 +108,21 @@ function jumlahnyaMusuh() {
          jumlahMusuh.push(new Musuh())
 
     for (let m = jumlahMusuh.length - 1; m >= 0; m--){
-        jumlahMusuh[m].terbaru()
+        let musuh = jumlahMusuh[m];
+        musuh.terbaru();
 
-        if (jumlahMusuh[m].y > canvas.height){
+        if (peluruNabrak(pemain, musuh)){
+            nyawa -= 1;
+            jumlahMusuh.splice(m, 1);
+
+            if (nyawa <= 0){
+                alert ('game over, ' + 'skormu = ' + skorPemain)
+                resetGame()
+            }
+        } else if (jumlahMusuh[m].y > canvas.height){
             jumlahMusuh.splice(m, 1)
-        }
+        }   
     }
-
 }
 function musuhDraw(){
     for (let musuh of jumlahMusuh)
@@ -136,6 +144,7 @@ const latar = {
 latar.picture.src = 'asset/Backgrounds/blue.png';
 
 //instance
+let nyawa = 5;
 let jumlahPeluru = [];
 let pemain = new Pemain();
 let jumlahMusuh = [];
@@ -186,10 +195,24 @@ function peluruDraw(){
 
 function skorDraw(){
     drawing.fillStyle = 'white';
-    drawing.font = 'arial 24px';
-    drawing.fillText ('skor = ' + skorPemain, 30, 10, 1000) 
+    drawing.font = '24px arial';
+    drawing.fillText ('skor = ' + skorPemain, 30, 30);
+    drawing.fillText ('nyawamu = ' + nyawa, 30, 60)
+    drawing.fillText ('By: Java Al Khawarizmi', 30, 90)
 }
 
+//Reset
+
+function resetGame(){
+    drawing.clearRect(0,0, canvas.width, canvas.height)
+    skorPemain = 0;
+    nyawa = 5;
+    jumlahPeluru = [];
+    jumlahMusuh = []
+    pemain.x = canvas.width / 2 - pemain.w / 2;
+    pemain.y = canvas.height - pemain.h;
+    pengulangan();
+}
 //Asset
 
 let assetDimuat = 0;
