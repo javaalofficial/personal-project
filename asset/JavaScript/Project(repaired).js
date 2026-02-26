@@ -83,23 +83,41 @@ class Peluru {
 
 class Musuh {
     constructor(x, y){
-        this.x = 10;
-        this.y = 10;
         this.h = 50;
         this.w = 50;
+        this.y = -this.h;
+        this.x = Math.random() * (canvas.width - this.w);
         this.speed = 10;
         this.picture = new Image();
         this.picture.src = 'asset/PNG/Enemies/enemyBlack1.png'
     }
     terbaru(){
         this.y += this.speed
+        
     }
     draw(){
-        musuh.terbaru();
         drawing.drawImage(this.picture, this.x, this.y, this.w, this.h)
     }
+
 }
 
+function jumlahnyaMusuh() {
+    if (Math.random() < 0.1)
+         jumlahMusuh.push(new Musuh())
+
+    for (let m = jumlahMusuh.length - 1; m >= 0; m--){
+        jumlahMusuh[m].terbaru()
+
+        if (jumlahMusuh[m].y > canvas.height){
+            jumlahMusuh.splice(m, 1)
+        }
+    }
+
+}
+function musuhDraw(){
+    for (let musuh of jumlahMusuh)
+        musuh.draw()
+}
 //latar
 
 const latar = {
@@ -118,7 +136,7 @@ latar.picture.src = 'asset/Backgrounds/blue.png';
 //instance
 let jumlahPeluru = [];
 let pemain = new Pemain();
-let musuh = new Musuh();
+let jumlahMusuh = [];
 
 //peluru
 
@@ -133,12 +151,23 @@ function peluruNabrak(peluru, objek) {
 }
 
 function peluruTerbaru(){
-for (let i = jumlahPeluru.length - 1; i >= 0; i--){
-    let p = jumlahPeluru[i];
-    p.terbaru();
+for (let p = jumlahPeluru.length - 1; p >= 0; p--){
+    let peluruBaru = jumlahPeluru[p]
+    peluruBaru.terbaru()
 
-        if (p.h + p.y < 0){
-        jumlahPeluru.splice(i, 1);
+    for (let m = jumlahMusuh.length - 1; m >= 0; m--){
+        let musuh = jumlahMusuh[m]
+
+        if (peluruNabrak(peluruBaru, musuh)){
+            console.log('kok gak meledak?');
+
+            jumlahMusuh.splice(m, 1)
+            jumlahPeluru.splice(p, 1)
+            break;
+        }
+    }
+        if (jumlahPeluru[p] && peluruBaru.h + peluruBaru.y < 0){
+        jumlahPeluru.splice(p, 1);
         }
     }
 }
@@ -184,6 +213,7 @@ function mulaiGame() {
 
 
 function terbaruTotal(){
+    jumlahnyaMusuh();
     pemain.terbaru();
     peluruTerbaru();
 }
@@ -193,7 +223,7 @@ function drawTotal(){
     latar.draw();
     pemain.draw();
     peluruDraw();
-    musuh.draw()
+    musuhDraw();
 }
 
 function pengulangan(){
