@@ -8,11 +8,12 @@ const drawing = canvas.getContext('2d');
 const click = {left: false, right: false, up: false, down: false};
 
 window.addEventListener('keydown', (e) => {
+    if (['ArrowUp', 'ArrowDown', 'ArrowRight', 'ArrowLeft'].includes(e.key)){e.preventDefault()}
     if (e.key === 'ArrowUp') click.up = true;
     if (e.key === 'ArrowDown') click.down = true;
     if (e.key === 'ArrowRight') click.right = true;
     if (e.key === 'ArrowLeft') click.left = true;
-    if (e.key === 'x') {jumlahPeluru.push( new Peluru(pemain.x + pemain.w /2 - 2.5, pemain.y))}
+    if (e.key === ' ') {jumlahPeluru.push( new Peluru(pemain.x + pemain.w /2 - 2.5, pemain.y))}
 })
 window.addEventListener('keyup', (e) => {
     if (e.key === 'ArrowUp') click.up = false;
@@ -21,7 +22,10 @@ window.addEventListener('keyup', (e) => {
     if (e.key === 'ArrowLeft') click.left = false;
 })
 
-//pemain
+
+//OBJEK 
+
+//Pemain 
 
 class Pemain {
     constructor(){
@@ -164,6 +168,8 @@ let pemain = new Pemain();
 let jumlahMusuh = [];
 let skorPemain = 0;
 
+// FUNGSI
+
 //peluru
 
 function peluruNabrak(peluru, objek) {
@@ -232,7 +238,7 @@ function skorDraw(){
 
 
 function resetGame(){
-
+    console.log('reset terpanggil!!!');
     drawing.clearRect(0,0, canvas.width, canvas.height)
     skorPemain = 0;
     nyawa = 5;
@@ -269,7 +275,7 @@ function mulaiGame() {
 
 function terbaruTotal(){
 
-if (GAME === true){
+if (GAME){
     jumlahnyaMusuh();
     pemain.terbaru();
     peluruTerbaru();
