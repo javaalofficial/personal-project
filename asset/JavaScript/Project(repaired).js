@@ -8,7 +8,9 @@ const drawing = canvas.getContext('2d');
 const click = {left: false, right: false, up: false, down: false};
 
 window.addEventListener('keydown', (e) => {
-    if (['ArrowUp', 'ArrowDown', 'ArrowRight', 'ArrowLeft', ' '].includes(e.key)){e.preventDefault()}
+    if (['ArrowUp', 'ArrowDown', 'ArrowRight', 'ArrowLeft', ' ', 'Enter'].includes(e.key)){e.preventDefault()}
+    if (MAINMENU) mainMenu();
+    if (e.key === 'Enter') click.enter = true;
     if (e.key === 'ArrowUp') click.up = true;
     if (e.key === 'ArrowDown') click.down = true;
     if (e.key === 'ArrowRight') click.right = true;
@@ -20,10 +22,11 @@ window.addEventListener('keyup', (e) => {
     if (e.key === 'ArrowDown') click.down = false;
     if (e.key === 'ArrowRight') click.right = false;
     if (e.key === 'ArrowLeft') click.left = false;
+    if (e.key === 'Enter') click.enter = false;
 })
 
 
-//OBJEK 
+//---------------OBJEK 
 
 //Pemain 
 
@@ -127,15 +130,16 @@ const latar = {
 
 latar.picture.src = 'asset/Backgrounds/blue.png';
 
-//instance
-let GAME = true;
+//-------------------------instance
+let MAINMENU = true;
+let GAME = false;
 let nyawa = 5;
 let jumlahPeluru = [];
 let pemain = new Pemain();
 let jumlahMusuh = [];
 let skorPemain = 0;
 
-// FUNGSI
+//------------------------------- FUNGSI
 
 
 
@@ -185,6 +189,8 @@ function musuhDraw(){
         musuh.draw()
 }
 
+//peluru
+
 function peluruTerbaru(){
 
 for (let p = jumlahPeluru.length - 1; p >= 0; p--){
@@ -230,7 +236,24 @@ function skorDraw(){
 
     drawing.fillStyle = 'gray'
     drawing.font = '15px arial'
-    drawing.fillText ('move = 👈👉👆👇 shoot = x', 30,120 )
+    drawing.fillText ('move = ◀🔼▶🔽 shoot = x', 30,120 )
+}
+
+//mainMenu
+
+function mainMenu(){
+    drawing.fillStyle = 'white';
+    drawing.textAlign = 'center'
+    drawing.fillRect(canvas.width/4 , canvas.height/2, canvas.width, canvas.height/4)
+    
+    drawing.fillStyle = 'black';
+    drawing.font = '30px arial'
+    drawing.textAlign = 'center'
+    drawing.fillText('klik enter untuk memulai!', 0,0)
+    if(click.enter){
+        GAME = true;
+        MAINMENU = false;
+    }
 }
 
 //Reset
@@ -248,6 +271,9 @@ function resetGame(){
     click.down = false;
     click.right = false;
     click.left = false;
+    MAINMENU = true;
+    GAME = false;
+    mainMenu();
 }
 
 //Asset
@@ -284,6 +310,7 @@ function drawTotal(){
 
     drawing.clearRect(0, 0, canvas.width, canvas.height);
     latar.draw();
+    mainMenu()
     pemain.draw();
     peluruDraw();
     musuhDraw();
