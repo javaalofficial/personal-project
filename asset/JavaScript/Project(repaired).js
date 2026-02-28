@@ -111,6 +111,47 @@ class Musuh {
     }
 }
 
+//latar
+
+const latar = {
+
+    x: 0,
+    y: 0,
+    w: canvas.width,
+    h: canvas.height,
+    picture: new Image(),
+    draw() {
+    drawing.drawImage(this.picture, this.x, this.y, this.w, this.h)
+    },
+};
+
+latar.picture.src = 'asset/Backgrounds/blue.png';
+
+//instance
+let GAME = true;
+let nyawa = 5;
+let jumlahPeluru = [];
+let pemain = new Pemain();
+let jumlahMusuh = [];
+let skorPemain = 0;
+
+// FUNGSI
+
+
+
+function peluruNabrak(peluru, objek) {
+
+    return (
+        peluru.x < objek.x + objek.w &&
+        peluru.x + peluru.w > objek.x &&
+        peluru.y < objek.y + objek.h &&
+        peluru.y + peluru.h > objek.y
+       
+    )
+}
+
+//musuh
+
 function jumlahnyaMusuh() {
 
     if (Math.random() < 0.1)
@@ -143,45 +184,6 @@ function musuhDraw(){
     for (let musuh of jumlahMusuh)
         musuh.draw()
 }
-//latar
-
-const latar = {
-
-    x: 0,
-    y: 0,
-    w: canvas.width,
-    h: canvas.height,
-    picture: new Image(),
-    draw() {
-    drawing.drawImage(this.picture, this.x, this.y, this.w, this.h)
-    },
-};
-
-latar.picture.src = 'asset/Backgrounds/blue.png';
-
-//instance
-
-let GAME = true;
-let nyawa = 5;
-let jumlahPeluru = [];
-let pemain = new Pemain();
-let jumlahMusuh = [];
-let skorPemain = 0;
-
-// FUNGSI
-
-//peluru
-
-function peluruNabrak(peluru, objek) {
-
-    return (
-        peluru.x < objek.x + objek.w &&
-        peluru.x + peluru.w > objek.x &&
-        peluru.y < objek.y + objek.h &&
-        peluru.y + peluru.h > objek.y
-       
-    )
-}
 
 function peluruTerbaru(){
 
@@ -206,7 +208,7 @@ for (let p = jumlahPeluru.length - 1; p >= 0; p--){
     }
 }
 
-
+//peluru
 
 function peluruDraw(){
 
@@ -216,7 +218,7 @@ function peluruDraw(){
 
 }
 
-
+//skor
 
 function skorDraw(){
 
@@ -231,11 +233,7 @@ function skorDraw(){
     drawing.fillText ('move = 👈👉👆👇 shoot = x', 30,120 )
 }
 
-
-
 //Reset
-
-
 
 function resetGame(){
     console.log('reset terpanggil!!!');
