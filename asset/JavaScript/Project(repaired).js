@@ -8,7 +8,7 @@ const drawing = canvas.getContext('2d');
 const click = {left: false, right: false, up: false, down: false};
 
 window.addEventListener('keydown', (e) => {
-    if (['ArrowUp', 'ArrowDown', 'ArrowRight', 'ArrowLeft'].includes(e.key)){e.preventDefault()}
+    if (['ArrowUp', 'ArrowDown', 'ArrowRight', 'ArrowLeft', ' '].includes(e.key)){e.preventDefault()}
     if (e.key === 'ArrowUp') click.up = true;
     if (e.key === 'ArrowDown') click.down = true;
     if (e.key === 'ArrowRight') click.right = true;
@@ -195,7 +195,7 @@ for (let p = jumlahPeluru.length - 1; p >= 0; p--){
         let musuh = jumlahMusuh[m]
 
         if (peluruNabrak(peluruBaru, musuh)){
-            console.log('total skor:' + skorPemain );
+            console.log('<== total musuh tertembak');
             jumlahMusuh.splice(m, 1)
             jumlahPeluru.splice(p, 1)
             skorPemain += 100;
