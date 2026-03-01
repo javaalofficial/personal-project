@@ -253,6 +253,7 @@ function mainMenu(){
     if(click.enter){
         GAME = true;
         MAINMENU = false;
+        drawing.clearRect(0,0,canvas.width,canvas.height)
     }
 }
 
@@ -273,7 +274,6 @@ function resetGame(){
     click.left = false;
     MAINMENU = true;
     GAME = false;
-    mainMenu();
 }
 
 //Asset
@@ -293,6 +293,11 @@ function mulaiGame() {
     requestAnimationFrame(pengulangan)
 }
 
+function menuAktif(){
+    if (MAINMENU) {
+        mainMenu()
+    } 
+}
 
 //loop
 
@@ -310,7 +315,7 @@ function drawTotal(){
 
     drawing.clearRect(0, 0, canvas.width, canvas.height);
     latar.draw();
-    mainMenu()
+    menuAktif()
     pemain.draw();
     peluruDraw();
     musuhDraw();
