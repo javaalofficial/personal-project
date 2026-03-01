@@ -243,13 +243,13 @@ function skorDraw(){
 
 function mainMenu(){
     drawing.fillStyle = 'white';
-    drawing.textAlign = 'center'
-    drawing.fillRect(canvas.width/4 , canvas.height/2, canvas.width, canvas.height/4)
+    // drawing.textAlign = 'center'
+    drawing.fillRect(0, canvas.height/2 - 30, canvas.width, 35)
     
     drawing.fillStyle = 'black';
     drawing.font = '30px arial'
     drawing.textAlign = 'center'
-    drawing.fillText('klik enter untuk memulai!', 10, 10)
+    drawing.fillText('klik enter untuk memulai!', canvas.width/2 , canvas.height/2)
     if(click.enter){
         GAME = true;
         MAINMENU = false;
