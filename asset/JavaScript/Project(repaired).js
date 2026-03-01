@@ -249,7 +249,7 @@ function mainMenu(){
     drawing.fillStyle = 'black';
     drawing.font = '30px arial'
     drawing.textAlign = 'center'
-    drawing.fillText('klik enter untuk memulai!', 0,0)
+    drawing.fillText('klik enter untuk memulai!', 10, 10)
     if(click.enter){
         GAME = true;
         MAINMENU = false;
