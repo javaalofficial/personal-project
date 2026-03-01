@@ -303,8 +303,10 @@ function menuAktif(){
 
 
 function terbaruTotal(){
-
-if (GAME){
+if (MAINMENU){
+    mainMenu()
+}
+else if (GAME){
     jumlahnyaMusuh();
     pemain.terbaru();
     peluruTerbaru();
