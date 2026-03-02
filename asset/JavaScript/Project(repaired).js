@@ -95,7 +95,8 @@ class Peluru {
 class Musuh {
 
     constructor(x, y){
-
+        // this.jalur = 10
+        // this.lebar.jalur = canvas.width / this.jalur
         this.h = 50;
         this.w = 50;
         this.y = -this.h;
@@ -125,7 +126,7 @@ const latar = {
     w: canvas.width,
     h: canvas.height,
     picture: new Image(),
-    speed:5,
+    speed:3,
 
     terbaru(){
         this.y1 += this.speed
@@ -217,7 +218,7 @@ for (let p = jumlahPeluru.length - 1; p >= 0; p--){
         let musuh = jumlahMusuh[m]
 
         if (nabrak(peluruBaru, musuh)){
-            console.log('<== total musuh tertembak');
+            console.log('musuh Tertembak!');
             jumlahMusuh.splice(m, 1)
             jumlahPeluru.splice(p, 1)
             skorPemain += 100;
@@ -242,16 +243,16 @@ function pelurudraw(){
 //skor
 
 function skordraw(){
-
+    drawing.textAlign = 'left'
     drawing.fillStyle = 'white';
     drawing.font = '24px arial';
-    drawing.fillText ('skor = ' + skorPemain, 30, 30);
-    drawing.fillText ('nyawamu = ' + nyawa, 30, 60)
-    drawing.fillText ('By: Java Al Khawarizmi', 30, 90)
+    drawing.fillText ('skor = ' + skorPemain, 20, 30);
+    drawing.fillText ('nyawamu = ' + nyawa, 20, 60)
+    drawing.fillText ('By: Java Al Khawarizmi', 20, 90)
 
     drawing.fillStyle = 'gray'
     drawing.font = '15px arial'
-    drawing.fillText ('move = ◀🔼▶🔽 shoot = x', 30,120 )
+    drawing.fillText ('move = ◀🔼▶🔽 shoot = x', 20,120 )
 }
 
 //mainMenu
@@ -317,6 +318,7 @@ function menuAktif(){
 
 
 function terbaruTotal(){
+    latar.terbaru()
 if (MAINMENU){
     mainMenu()
 }
