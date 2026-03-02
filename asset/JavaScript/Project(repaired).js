@@ -15,7 +15,8 @@ window.addEventListener('keydown', (e) => {
     if (e.key === 'ArrowDown') click.down = true;
     if (e.key === 'ArrowRight') click.right = true;
     if (e.key === 'ArrowLeft') click.left = true;
-    if (e.key === ' ') {jumlahPeluru.push( new Peluru(pemain.x + pemain.w /2 - 2.5, pemain.y))}
+    if (e.key === ' ') {jumlahPeluru.push(new Peluru(pemain.x + pemain.w /2 - 2.5, pemain.y))}
+
 })
 window.addEventListener('keyup', (e) => {
     if (e.key === 'ArrowUp') click.up = false;
@@ -119,12 +120,27 @@ class Musuh {
 const latar = {
 
     x: 0,
-    y: 0,
+    y1: 0,
+    y2: -canvas.height,
     w: canvas.width,
     h: canvas.height,
     picture: new Image(),
+    speed:5,
+
+    terbaru(){
+        this.y1 += this.speed
+        this.y2 += this.speed
+
+        if (this.y1 >= canvas.height)
+            this.y1 = this.y2 - canvas.height
+
+        if (this.y2 >= canvas.height)
+            this.y2 = this.y1 - canvas.height
+    },
+
     draw() {
-    drawing.drawImage(this.picture, this.x, this.y, this.w, this.h)
+    drawing.drawImage(this.picture, this.x, this.y1, this.w, this.h)
+    drawing.drawImage(this.picture, this.x, this.y2, this.w, this.h)
     },
 };
 
@@ -141,9 +157,9 @@ let skorPemain = 0;
 
 //------------------------------- FUNGSI
 
+//tabrakan
 
-
-function peluruNabrak(peluru, objek) {
+function nabrak(peluru, objek) {
 
     return (
         peluru.x < objek.x + objek.w &&
@@ -165,7 +181,7 @@ function jumlahnyaMusuh() {
         let musuh = jumlahMusuh[m];
         musuh.terbaru();
 
-        if (peluruNabrak(pemain, musuh)){
+        if (nabrak(pemain, musuh)){
             nyawa -= 1;
             jumlahMusuh.splice(m, 1);
 
@@ -183,7 +199,7 @@ function jumlahnyaMusuh() {
     }
 }
 
-function musuhDraw(){
+function musuhdraw(){
 
     for (let musuh of jumlahMusuh)
         musuh.draw()
@@ -200,7 +216,7 @@ for (let p = jumlahPeluru.length - 1; p >= 0; p--){
     for (let m = jumlahMusuh.length - 1; m >= 0; m--){
         let musuh = jumlahMusuh[m]
 
-        if (peluruNabrak(peluruBaru, musuh)){
+        if (nabrak(peluruBaru, musuh)){
             console.log('<== total musuh tertembak');
             jumlahMusuh.splice(m, 1)
             jumlahPeluru.splice(p, 1)
@@ -214,9 +230,7 @@ for (let p = jumlahPeluru.length - 1; p >= 0; p--){
     }
 }
 
-//peluru
-
-function peluruDraw(){
+function pelurudraw(){
 
     for (let peluruIni of jumlahPeluru){
         peluruIni.draw();
@@ -224,9 +238,10 @@ function peluruDraw(){
 
 }
 
+
 //skor
 
-function skorDraw(){
+function skordraw(){
 
     drawing.fillStyle = 'white';
     drawing.font = '24px arial';
@@ -243,7 +258,6 @@ function skorDraw(){
 
 function mainMenu(){
     drawing.fillStyle = 'white';
-    // drawing.textAlign = 'center'
     drawing.fillRect(0, canvas.height/2 - 30, canvas.width, 35)
     
     drawing.fillStyle = 'black';
@@ -319,9 +333,9 @@ function drawTotal(){
     latar.draw();
     menuAktif()
     pemain.draw();
-    peluruDraw();
-    musuhDraw();
-    skorDraw();
+    pelurudraw();
+    musuhdraw();
+    skordraw();
 }
 
 function pengulangan(){
