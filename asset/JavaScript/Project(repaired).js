@@ -92,20 +92,33 @@ class Peluru {
 
 //musuh
 
+const jalurMusuh = 5;
 class Musuh {
+    
 
     constructor(x, y){
-        // this.jalur = 10
-        // this.lebar.jalur = canvas.width / this.jalur
+        // let letakMusuh = Math.floor(Math.random() * jalurMusuh)
+        // this.lebarJalur = canvas.width / this.jalur
+        // this.acakinJalur = Math.floor(Math.random() * this.jalur)
         this.h = 50;
         this.w = 50;
         this.y = -this.h;
-        this.x = Math.random() * (canvas.width - this.w);
+        this.x = canvas.width / 2 - this.w / 2
         this.speed = 10;
         this.picture = new Image();
         this.picture.src = 'asset/PNG/Enemies/enemyBlack1.png'
     }
+//     // Di bagian atas file
+// const JUMLAH_JALUR = 5;
 
+// // Di dalam Class Musuh
+// constructor() {
+//     let jalur = Math.floor(Math.random() * JUMLAH_JALUR);
+//     this.w = 50;
+//     this.h = 50;
+//     this.x = (jalur * (canvas.width / JUMLAH_JALUR)) + (canvas.width / (JUMLAH_JALUR * 2)) - (this.w / 2);
+//     // ... sisanya sama
+// }
     terbaru(){
 
         this.y += this.speed
@@ -268,7 +281,6 @@ function mainMenu(){
     if(click.enter){
         GAME = true;
         MAINMENU = false;
-        drawing.clearRect(0,0,canvas.width,canvas.height)
     }
 }
 
