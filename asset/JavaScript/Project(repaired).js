@@ -29,7 +29,7 @@ window.addEventListener('keyup', (e) => {
 
 //---------------OBJEK 
 
-//Pemain 
+//Player
 
 class Pemain {
     constructor(){
@@ -69,7 +69,7 @@ class Pemain {
     }
 }
 
-//peluru
+//bullet
 
 class Peluru {
 
@@ -90,7 +90,8 @@ class Peluru {
     }
 }
 
-//musuh
+//enemy
+
 class Musuh{
     constructor(x, y){
         const jumlahJalur = 5;
@@ -99,8 +100,8 @@ class Musuh{
         this.h = 50;
         this.w = 50;
         this.y = -this.h;
-        this.x = nomorJalur * lebarJalur
-        this.speed = 10;
+        this.x = (nomorJalur * lebarJalur) + (lebarJalur/2) - this.w/2
+        this.speed = Math.random() * 10 + 3;
         this.picture = new Image();
         this.picture.src = 'asset/PNG/Enemies/enemyBlack1.png'
     }
@@ -205,7 +206,7 @@ function musuhdraw(){
         musuh.draw()
 }
 
-//peluru
+//bullet
 
 function peluruTerbaru(){
 
