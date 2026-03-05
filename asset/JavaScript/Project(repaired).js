@@ -116,7 +116,7 @@ class Musuh{
     }
 }
 
-//latar
+//Background
 
 const latar = {
 
@@ -240,7 +240,7 @@ function pelurudraw(){
 }
 
 
-//skor
+//scor
 
 function skordraw(){
     drawing.textAlign = 'left'
