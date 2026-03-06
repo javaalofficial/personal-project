@@ -7,16 +7,22 @@
 </head>
 <body>
     <script>
-        let a = 4;
-        console.log('angka awal ' + a);
-        console.log(a);  // 10
-        console.log('angka acakan math.random * 10 (angka a tadi)');
-        let b = Math.random() * a //math.random * 10 (angka a tadi)
-        console.log(b); //angka acak
-        console.log("math.floor * angka acak(b)");
-        let c = Math.floor(b)  // math.floor * angka acak(b) yang didapat dari math.random * a yang mana a = 10
-        console.log(c); //angka acak tanpa desimal
-        console.log('karena math.random hanya mengacak sedangkan math.floor hanya membulatkan, maka angka hasil gak bakal lebih besar ' + a + ' (a) dan lebih kecil dari 0');
+        // let a = 4;
+        // console.log('angka awal ' + a);
+        // console.log(a);  // 10
+        // console.log('angka acakan math.random * 10 (angka a tadi)');
+        // let b = Math.random() * a //math.random * 10 (angka a tadi)
+        // console.log(b); //angka acak
+        // console.log("math.floor * angka acak(b)");
+        // let c = Math.floor(b)  // math.floor * angka acak(b) yang didapat dari math.random * a yang mana a = 10
+        // console.log(c); //angka acak tanpa desimal
+        // console.log('karena math.random hanya mengacak sedangkan math.floor hanya membulatkan, maka angka hasil gak bakal lebih besar ' + a + ' (a) dan lebih kecil dari 0');
+    let y = 0;
+for (let i = 0; i < 10; i++) {
+    y += 10; // Ceritanya musuh turun 10 pixel
+    let hasilSin = Math.sin(y * 0.1) * 50; 
+    console.log("Posisi Y: " + y + " | Geseran X: " + hasilSin.toFixed(2));
+}
     </script>
 </body>
 </html>

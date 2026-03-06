@@ -27,7 +27,7 @@ window.addEventListener('keyup', (e) => {
 })
 
 
-//---------------OBJEK 
+//---------------OBJECT
 
 //Player
 
@@ -84,6 +84,7 @@ class Peluru {
     }
     terbaru(){
         this.y -= this.speed;
+        this.x += Math.sin(Math.sin(Math.floor(Math.random() * 10 - 2) + this.y) * 2) * 50
     }
     draw(){
         drawing.drawImage(this.picture, this.x, this.y, this.w, this.h)
@@ -107,7 +108,7 @@ class Musuh{
     }
 
     terbaru(){
-
+        
         this.y += this.speed
        
     }
@@ -156,9 +157,9 @@ let pemain = new Pemain();
 let jumlahMusuh = [];
 let skorPemain = 0;
 
-//------------------------------- FUNGSI
+//------------------------------- FUNCTION
 
-//tabrakan
+//ObjectCrash
 
 function nabrak(peluru, objek) {
 
@@ -171,7 +172,7 @@ function nabrak(peluru, objek) {
     )
 }
 
-//musuh
+//enemy
 
 function jumlahnyaMusuh() {
 
