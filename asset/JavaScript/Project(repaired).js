@@ -39,7 +39,8 @@ class Pemain {
         this.y = canvas.height - this.h;
         this.speed = 10;
         this.picture = new Image();
-        this.picture.src = 'asset/PNG/playerShip1_blue.png'
+        this.picture.src = 'asset/PNG/playerShip1_blue.png';
+        this.waktuKebal = 0;
     };
 
     // update
@@ -49,7 +50,7 @@ class Pemain {
         if (click.down) this.y += this.speed;
         if (click.right) this.x += this.speed;
         if (click.left) this.x -= this.speed;
-
+        if (this.waktuKebal > 0) this.waktuKebal--;
         this.clamp()
     };
 
@@ -65,9 +66,14 @@ class Pemain {
     //draw
 
     draw() {
-        drawing.drawImage(this.picture, this.x, this.y, this.w, this.h)
-    }
-}
+        if (this.waktuKebal > 0 && this.waktuKebal % 10 < 5) {
+            drawing.drawImage(this.picture, this.x, this.y, this.w, this.h)
+        };
+        if (!this.waktuKebal > 0 && this.waktuKebal % 10 < 5){
+            drawing.drawImage(this.picture, this.x, this.y, this.w, this.h)
+        }
+};
+};
 
 //bullet
 
@@ -84,7 +90,7 @@ class Peluru {
     }
     terbaru(){
         this.y -= this.speed;
-        this.x += Math.sin(Math.sin(Math.floor(Math.random() * 10 - 2) + this.y) * 2) * 50
+        this.x += Math.sin(Math.sin(Math.floor(Math.random() * 10 - 2) + this.y) * 2) * 5
     }
     draw(){
         drawing.drawImage(this.picture, this.x, this.y, this.w, this.h)
@@ -94,23 +100,22 @@ class Peluru {
 //enemy
 
 class Musuh{
-    constructor(x, y){
-        const jumlahJalur = 5;
-        const lebarJalur = canvas.width / jumlahJalur
-        const nomorJalur = Math.floor(Math.random() * jumlahJalur)
+    constructor(){
         this.h = 50;
         this.w = 50;
         this.y = -this.h;
-        this.x = (nomorJalur * lebarJalur) + (lebarJalur/2) - this.w/2
         this.speed = Math.random() * 10 + 3;
         this.picture = new Image();
         this.picture.src = 'asset/PNG/Enemies/enemyBlack1.png'
+        const jumlahJalur = 5;
+        const lebarJalur = canvas.width / jumlahJalur
+        const nomorJalur = Math.floor(Math.random() * jumlahJalur)
+        this.tengahJalur = (nomorJalur * lebarJalur) + (lebarJalur/2) - this.w/2
+        this.x = this.tengahJalur
     }
-
     terbaru(){
-        
         this.y += this.speed
-       
+       this.x = this.tengahJalur + Math.sin(this.y * 0.05) * 100 ;
     }
     draw(){
         drawing.drawImage(this.picture, this.x, this.y, this.w, this.h)
@@ -154,6 +159,7 @@ let GAME = false;
 let nyawa = 5;
 let jumlahPeluru = [];
 let pemain = new Pemain();
+let musuh = new Musuh();
 let jumlahMusuh = [];
 let skorPemain = 0;
 
@@ -184,9 +190,11 @@ function jumlahnyaMusuh() {
         musuh.terbaru();
 
         if (nabrak(pemain, musuh)){
+            if (pemain.waktuKebal <= 0){
             nyawa -= 1;
+            pemain.waktuKebal = 180
+        }
             jumlahMusuh.splice(m, 1);
-
             if (nyawa <= 0){
                 GAME = false;
                 alert ('game over, skormu = ' + skorPemain);
