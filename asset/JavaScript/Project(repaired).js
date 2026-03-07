@@ -40,7 +40,13 @@ class Pemain {
         this.speed = 10;
         this.picture = new Image();
         this.picture.src = 'asset/PNG/playerShip1_blue.png';
+        this.pictureDamaged1 = new Image()
+        this.pictureDamaged1.src = 'asset/PNG/Damage/playerShip1_damage1.png'
+        this.pictureDamaged2 = new Image()
+        this.pictureDamaged2.src = 'asset/PNG/Damage/playerShip1_damage3.png'
         this.waktuKebal = 0;
+        this.kondisi = 0;
+        this.mutar = 0;
     };
 
     // update
@@ -51,6 +57,11 @@ class Pemain {
         if (click.right) this.x += this.speed;
         if (click.left) this.x -= this.speed;
         if (this.waktuKebal > 0) this.waktuKebal--;
+        if (nyawa > 3) this.kondisi = 0;
+        if (nyawa === 3) this.kondisi = 1;
+        if (nyawa === 1) this.kondisi = 2;
+        if (click.right) this.mutar = 40;
+        if (click.left) this.mutar = -40
         this.clamp()
     };
 
@@ -64,15 +75,33 @@ class Pemain {
     };
 
     //draw
+    // putaran(){
+    // drawing.save();
+    // drawing.translate(this.x,this.y)
+    // this.x = drawing.rotate(this.mutar * Math.PI / 180)
+    // drawing.restore()
+    // }
+    basic(){
+        drawing.drawImage(this.picture, this.x, this.y, this.w, this.h)
+    }
+    damaged1(){
+        drawing.drawImage(this.pictureDamaged1, this.x, this.y, this.w, this.h)
+    }
+    damaged2(){
+        drawing.drawImage(this.pictureDamaged2, this.x, this.y, this.w, this.h)
+    }
 
     draw() {
-        if (this.waktuKebal > 0 && this.waktuKebal % 10 < 2) {
-            drawing.drawImage(this.picture, this.x, this.y, this.w, this.h)
+        if (this.waktuKebal > 0 && this.waktuKebal % 10 < 5) {
+            return;
         };
-        if (this.waktuKebal === 0){
-            drawing.drawImage(this.picture, this.x, this.y, this.w, this.h)
-        }
-};
+        this.basic()
+        if (this.kondisi === 1)
+        this.damaged1()
+        if (this.kondisi === 2)
+        this.damaged2()
+
+    };
 };
 
 //bullet
@@ -314,7 +343,7 @@ function resetGame(){
 //Asset
 
 let assetDimuat = 0;
-const jumlahAsset = 2;
+const jumlahAsset = 3;
 
 function assetSiap() {
     assetDimuat++;
@@ -322,6 +351,7 @@ function assetSiap() {
 }
 
 pemain.picture.onload = assetSiap;
+pemain.pictureDamaged1.onload = assetSiap;
 latar.picture.onload = assetSiap;
 
 function mulaiGame() {
