@@ -1,0 +1,28 @@
+Konsep Modulo (%) dalam Game Dev
+Modulo (%) adalah Sisa Bagi. Dalam animasi game, ini digunakan untuk membuat siklus atau perulangan (seperti saklar ON/OFF).
+
+Irama Kedip (Invincibility Frames)
+
+Jika kita ingin pesawat berkedip saat kebal:
+
+1. Variabel Durasi: `waktuKebal` (misal 120 frame).
+
+2. Rumus Siklus: `waktuKebal % 10`.
+
+  • Hasilnya akan selalu berulang: 0, 1, 2, 3, 4, 5, 6, 7, 8, 9.
+
+3. Logika Saklar:
+
+  • `if (sisa bagi < 5)` -> GAMBAR (Lampu ON).
+
+  • `if (sisa bagi >= 5)` -> HILANG (Lampu OFF).
+
+Kenapa Angka Besar Bisa Kedip?
+
+Meskipun `waktuKebal` dimulai dari 120, 180, atau 1000, `waktuKebal % 10` akan memecah durasi tersebut menjadi potongan-potongan kecil berdurasi 10 frame yang berulang terus sampai durasi habis.
+
+Tips Implementasi
+
+• Kecepatan: Ganti angka 10 (misal `% 20`) untuk kedip yang lebih lambat.
+
+• Kondisi Normal: Selalu pastikan ada pengecekan `if (waktuKebal === 0)` agar pesawat tidak hilang saat sedang tidak kebal.

@@ -15,7 +15,7 @@ window.addEventListener('keydown', (e) => {
     if (e.key === 'ArrowDown') click.down = true;
     if (e.key === 'ArrowRight') click.right = true;
     if (e.key === 'ArrowLeft') click.left = true;
-    if (e.key === ' ') {jumlahPeluru.push(new Peluru(pemain.x + pemain.w /2 - 2.5, pemain.y))}
+    if (e.key === ' ') {jumlahPeluru.push(new Peluru(pemain.x + pemain.w /2 - 2.5, pemain.y));if(GAME)Stembak()}
 
 })
 window.addEventListener('keyup', (e) => {
@@ -66,10 +66,10 @@ class Pemain {
     //draw
 
     draw() {
-        if (this.waktuKebal > 0 && this.waktuKebal % 10 < 5) {
+        if (this.waktuKebal > 0 && this.waktuKebal % 10 < 2) {
             drawing.drawImage(this.picture, this.x, this.y, this.w, this.h)
         };
-        if (!this.waktuKebal > 0 && this.waktuKebal % 10 < 5){
+        if (this.waktuKebal === 0){
             drawing.drawImage(this.picture, this.x, this.y, this.w, this.h)
         }
 };
@@ -101,8 +101,8 @@ class Peluru {
 
 class Musuh{
     constructor(){
-        this.h = 50;
-        this.w = 50;
+        this.h = 20;
+        this.w = 20;
         this.y = -this.h;
         this.speed = Math.random() * 10 + 3;
         this.picture = new Image();
@@ -163,6 +163,15 @@ let musuh = new Musuh();
 let jumlahMusuh = [];
 let skorPemain = 0;
 
+//------------------------------- Audio
+
+let suaraLedakan = new Audio('asset/sound/sfx_zap.ogg')
+let suaraTembak = new Audio('asset/sound/sfx_laser1.ogg');
+function Stembak() {
+    suaraTembak.currentTime = 0
+    suaraTembak.play()
+}
+
 //------------------------------- FUNCTION
 
 //ObjectCrash
@@ -204,7 +213,7 @@ function jumlahnyaMusuh() {
             }
         } else if (jumlahMusuh[m].y > canvas.height){
             jumlahMusuh.splice(m, 1)
-            skorPemain += 10;
+            skorPemain += 10;            
         }  
     }
 }
@@ -231,6 +240,8 @@ for (let p = jumlahPeluru.length - 1; p >= 0; p--){
             jumlahMusuh.splice(m, 1)
             jumlahPeluru.splice(p, 1)
             skorPemain += 100;
+            suaraLedakan.currentTime = 0
+            suaraLedakan.play()
             break;
         }
     }
@@ -297,6 +308,7 @@ function resetGame(){
     click.left = false;
     MAINMENU = true;
     GAME = false;
+    pemain.waktuKebal = 0
 }
 
 //Asset
