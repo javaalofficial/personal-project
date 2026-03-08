@@ -60,8 +60,8 @@ class Pemain {
         if (nyawa > 3) this.kondisi = 0;
         if (nyawa === 3) this.kondisi = 1;
         if (nyawa === 1) this.kondisi = 2;
-        if (click.right) this.mutar = 40;
-        if (click.left) this.mutar = -40
+        if (click.right) this.mutar = 20;
+        if (click.left) this.mutar = -20
         this.clamp()
     };
 
@@ -75,14 +75,13 @@ class Pemain {
     };
 
     //draw
-    // putaran(){
-    // drawing.save();
-    // drawing.translate(this.x,this.y)
-    // this.x = drawing.rotate(this.mutar * Math.PI / 180)
-    // drawing.restore()
-    // }
+    putaran(){
+    drawing.save();
+    drawing.translate(this.x - this.w/2,this.y - this.h/2)
+    drawing.rotate(this.mutar * Math.PI / 180)
+    }
     basic(){
-        drawing.drawImage(this.picture, this.x, this.y, this.w, this.h)
+        drawing.drawImage(this.picture, this.w/2, this.h/2, this.w, this.h)
     }
     damaged1(){
         drawing.drawImage(this.pictureDamaged1, this.x, this.y, this.w, this.h)
@@ -95,12 +94,13 @@ class Pemain {
         if (this.waktuKebal > 0 && this.waktuKebal % 10 < 5) {
             return;
         };
+        this.putaran()
         this.basic()
         if (this.kondisi === 1)
         this.damaged1()
         if (this.kondisi === 2)
         this.damaged2()
-
+        drawing.restore()
     };
 };
 
