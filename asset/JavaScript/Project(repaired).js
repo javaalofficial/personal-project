@@ -15,7 +15,7 @@ window.addEventListener('keydown', (e) => {
     if (e.key === 'ArrowDown') click.down = true;
     if (e.key === 'ArrowRight') click.right = true;
     if (e.key === 'ArrowLeft') click.left = true;
-    if (e.key === ' ') {jumlahPeluru.push(new Peluru(pemain.x + pemain.w /2 - 2.5, pemain.y));if(GAME)Stembak()}
+    if (e.key === ' ' && GAME === true) {jumlahPeluru.push(new Peluru(pemain.x + pemain.w /2 - 2.5, pemain.y));if(GAME)Stembak()}
 
 })
 window.addEventListener('keyup', (e) => {
@@ -60,8 +60,10 @@ class Pemain {
         if (nyawa > 3) this.kondisi = 0;
         if (nyawa === 3) this.kondisi = 1;
         if (nyawa === 1) this.kondisi = 2;
+        //mutar
         if (click.right) this.mutar = 20;
-        if (click.left) this.mutar = -20
+        else if (click.left) this.mutar = -20;
+        else this.mutar = 0
         this.clamp()
     };
 
@@ -74,26 +76,26 @@ class Pemain {
         if (this.y + this.h > canvas.height) this.y = canvas.height - this.h;
     };
 
+
     //draw
+
     putaran(){
     drawing.save();
-    drawing.translate(this.x - this.w/2,this.y - this.h/2)
+    drawing.translate(this.x + this.w/2,this.y + this.h/2)
     drawing.rotate(this.mutar * Math.PI / 180)
     }
     basic(){
-        drawing.drawImage(this.picture, this.w/2, this.h/2, this.w, this.h)
+        drawing.drawImage(this.picture, -this.w/2, -this.h/2, this.w, this.h)
     }
     damaged1(){
-        drawing.drawImage(this.pictureDamaged1, this.x, this.y, this.w, this.h)
+        drawing.drawImage(this.pictureDamaged1, -this.w/2, -this.h/2, this.w, this.h)
     }
     damaged2(){
-        drawing.drawImage(this.pictureDamaged2, this.x, this.y, this.w, this.h)
+        drawing.drawImage(this.pictureDamaged2, -this.w/2, -this.h/2, this.w, this.h)
     }
 
     draw() {
-        if (this.waktuKebal > 0 && this.waktuKebal % 10 < 5) {
-            return;
-        };
+        if (this.waktuKebal > 0 && this.waktuKebal % 10 < 5) return;
         this.putaran()
         this.basic()
         if (this.kondisi === 1)
