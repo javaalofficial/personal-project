@@ -9,13 +9,12 @@ const click = {left: false, right: false, up: false, down: false};
 
 window.addEventListener('keydown', (e) => {
     if (['ArrowUp', 'ArrowDown', 'ArrowRight', 'ArrowLeft', ' ', 'Enter'].includes(e.key)){e.preventDefault()}
-    if (MAINMENU) mainMenu();
     if (e.key === 'Enter') click.enter = true;
     if (e.key === 'ArrowUp') click.up = true;
     if (e.key === 'ArrowDown') click.down = true;
     if (e.key === 'ArrowRight') click.right = true;
     if (e.key === 'ArrowLeft') click.left = true;
-    if (e.key === ' ' && GAME === true) {jumlahPeluru.push(new Peluru(pemain.x + pemain.w /2 - 2.5, pemain.y));if(GAME)Stembak()}
+    if (e.key === ' ' && GAME) {jumlahPeluru.push(new Peluru(pemain.x + pemain.w /2 - 2.5, pemain.y));if(GAME)Stembak()}
 
 })
 window.addEventListener('keyup', (e) => {
@@ -47,23 +46,28 @@ class Pemain {
         this.waktuKebal = 0;
         this.kondisi = 0;
         this.mutar = 0;
+        this.input = this.draw()
+        this.radian = this.mutar * (Math.PI / 180)
     };
 
     // update
 
     terbaru(){
-        if (click.up) this.y -= this.speed;
-        if (click.down) this.y += this.speed;
-        if (click.right) this.x += this.speed;
-        if (click.left) this.x -= this.speed;
+        // if (click.up) this.y -= this.speed;
+        // if (click.down) this.y += this.speed;
+        // if (click.right) this.x += this.speed;
+        // if (click.left) this.x -= this.speed;
+        if (click.up) this.y -= Math.cos(this.radian) * this.speed;
+        if (click.down) this.y += Math.cos(this.radian) * this.speed;
+        if (click.right) this.x -= Math.sin(this.radian) * this.speed;
+        if (click.right) this.x += Math.sin(this.radian) * this.speed; 
         if (this.waktuKebal > 0) this.waktuKebal--;
         if (nyawa > 3) this.kondisi = 0;
         if (nyawa === 3) this.kondisi = 1;
         if (nyawa === 1) this.kondisi = 2;
         //mutar
-        if (click.right) this.mutar = 20;
-        else if (click.left) this.mutar = -20;
-        else this.mutar = 0
+        if (click.right) this.mutar += 3;
+        else if (click.left) this.mutar -= 3;
         this.clamp()
     };
 
@@ -104,6 +108,7 @@ class Pemain {
         this.damaged2()
         drawing.restore()
     };
+    
 };
 
 //bullet
@@ -118,10 +123,12 @@ class Peluru {
         this.speed = 15;
         this.picture = new Image()
         this.picture.src = 'asset/PNG/Lasers/laserBlue01.png'
+        this.radian = pemain.mutar * (Math.PI / 180)
     }
     terbaru(){
-        this.y -= this.speed;
-        this.x += Math.sin(Math.sin(Math.floor(Math.random() * 10 - 2) + this.y) * 2) * 5
+        this.y -= Math.cos(this.radian) * this.speed;
+        // this.x += Math.sin(Math.floor(Math.random() * 10 - 2) + this.y) * 5
+        this.x += Math.sin(this.radian) * this.speed
     }
     draw(){
         drawing.drawImage(this.picture, this.x, this.y, this.w, this.h)
@@ -193,7 +200,7 @@ let pemain = new Pemain();
 let musuh = new Musuh();
 let jumlahMusuh = [];
 let skorPemain = 0;
-
+menuAktif()
 //------------------------------- Audio
 
 let suaraLedakan = new Audio('asset/sound/sfx_zap.ogg')
@@ -340,6 +347,7 @@ function resetGame(){
     MAINMENU = true;
     GAME = false;
     pemain.waktuKebal = 0
+    pemain.mutar = 0
 }
 
 //Asset
@@ -371,10 +379,8 @@ function menuAktif(){
 
 function terbaruTotal(){
     latar.terbaru()
-if (MAINMENU){
-    mainMenu()
-}
-else if (GAME){
+    menuAktif()
+if (GAME){
     jumlahnyaMusuh();
     pemain.terbaru();
     peluruTerbaru();

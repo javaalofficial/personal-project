@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>Belajar Sin & Cos - Visual Interaktif</title>
+    <style>
+        body {
+            background: #1a1a2e;
+            color: white;
+            font-family: 'Segoe UI', sans-serif;
+            text-align: center;
+            padding: 20px;
+        }
+        h1 { color: #00d4ff; }
+        
+        .kotak-besar {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .bagian {
+            background: #16213e;
+            padding: 20px;
+            border-radius: 15px;
+            width: 300px;
+        }
+        
+        canvas {
+            background: #0f3460;
+            border-radius: 10px;
+            border: 2px solid #00d4ff;
+        }
+        
+        input[type="range"] {
+            width: 100%;
+            margin: 15px 0;
+        }
+        
+        .hasil {
+            background: #0f3460;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 15px;
+        }
+        
+        .angka {
+            font-size: 24px;
+            font-weight: bold;
+            color: #00d4ff;
+        }
+        
+        .penjelasan {
+            font-size: 14px;
+            color: #aaa;
+            margin-top: 10px;
+        }
+        
+        button {
+            background: #00d4ff;
+            color: #1a1a2e;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        
+        button:hover {
+            background: #00a3cc;
+        }
+        
+        .analogi {
+            background: #e94560;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px auto;
+            max-width: 600px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Belajar Sin & Cos</h1>
+    
+    <div class="analogi">
+        <h3>Analogi: Lempar Bola</h3>
+        <p>Bayangkan kamu berdiri di tengah lapangan dan melempar bola ke depan:</p>
+        <p><strong>Angle = 0</strong> = Bola lurus ke depan</p>
+        <p><strong>Angle = 30</strong> = Bola maju ke depan DAN ke kanan</p>
+        <p><strong>Angle = -30</strong> = Bola maju ke depan DAN ke kiri</p>
+    </div>
+
+    <div class="kotak-besar">
+        <div class="bagian">
+            <h2>Sin (X)</h2>
+            <canvas id="canvasSin" width="250" height="250"></canvas>
+            <br>
+            <label>Angle: <span id="labelAngle">0</span></label>
+            <input type="range" id="sliderAngle" min="-90" max="90" value="0">
+            
+            <div class="hasil">
+                <p>Sin(<span id="nilaiAngle">0</span>) =</p>
+                <p class="angka" id="hasilSin">0</p>
+            </div>
+            <p class="penjelasan" id="penjelasanSin">
+                Bola bergerak ke X (0 = tengah)
+            </p>
+        </div>
+
+        <div class="bagian">
+            <h2>Cos (Y)</h2>
+            <canvas id="canvasCos" width="250" height="250"></canvas>
+            <br>
+            <label>Angle: <span id="labelAngleCos">0</span></label>
+            <input type="range" id="sliderAngleCos" min="-90" max="90" value="0">
+            
+            <div class="hasil">
+                <p>Cos(<span id="nilaiAngleCos">0</span>) =</p>
+                <p class="angka" id="hasilCos">1</p>
+            </div>
+            <p class="penjelasan" id="penjelasanCos">
+                Bola bergerak ke Y (1 = penuh)
+            </p>
+        </div>
+    </div>
+
+    <div class="bagian" style="width: 600px; margin: 20px auto;">
+        <h2>Simulasi Peluru</h2>
+        <canvas id="canvasGame" width="600" height="300"></canvas>
+        <br>
+        <button id="btnTembak">Tembak</button>
+        <button id="btnReset">Reset</button>
+        <p class="penjelasan">Geser slider di atas, lalu klik tombol untuk lihat gerakan peluru!</p>
+    </div>
+
+    <script>
+        // BAGIAN SIN
+        const canvasSin = document.getElementById('canvasSin');
+        const ctxSin = canvasSin.getContext('2d');
+        const sliderAngle = document.getElementById('sliderAngle');
+        
+        function gambarSin() {
+            const angle = parseInt(sliderAngle.value);
+            const radians = angle * Math.PI / 180;
+            const sinValue = Math.sin(radians);
+            
+            document.getElementById('labelAngle').textContent = angle;
+            document.getElementById('nilaiAngle').textContent = angle;
+            document.getElementById('hasilSin').textContent = sinValue.toFixed(3);
+            
+            if (angle === 0) {
+                document.getElementById('penjelasanSin').textContent = "Sin(0) = 0 - Bola TIDAK ke kiri/kanan";
+            } else if (angle > 0) {
+                document.getElementById('penjelasanSin').textContent = "Sin(" + angle + ") = " + sinValue.toFixed(3) + " - Bola ke KANAN";
+            } else {
+                document.getElementById('penjelasanSin').textContent = "Sin(" + angle + ") = " + sinValue.toFixed(3) + " - Bola ke KIRI";
+            }
+
+            ctxSin.clearRect(0, 0, 250, 250);
+            
+            // Lingkaran
+            ctxSin.beginPath();
+            ctxSin.arc(125, 125, 80, 0, Math.PI * 2);
+            ctxSin.strokeStyle = '#333';
+            ctxSin.lineWidth = 2;
+            ctxSin.stroke();
+            
+            // Garis tengah
+            ctxSin.beginPath();
+            ctxSin.moveTo(125, 125);
+            ctxSin.lineTo(125, 45);
+            ctxSin.strokeStyle = '#00d4ff';
+            ctxSin.lineWidth = 3;
+            ctxSin.stroke();
+            
+            // Garis miring
+            const endX = 125 + Math.sin(radians) * 80;
+            const endY = 125 - Math.cos(radians) * 80;
+            
+            ctxSin.beginPath();
+            ctxSin.moveTo(125, 125);
+            ctxSin.lineTo(endX, endY);
+            ctxSin.strokeStyle = '#e94560';
+            ctxSin.lineWidth = 3;
+            ctxSin.stroke();
+            
+            // Titik
+            ctxSin.beginPath();
+            ctxSin.arc(endX, endY, 8, 0, Math.PI * 2);
+            ctxSin.fillStyle = '#e94560';
+            ctxSin.fill();
+            
+            ctxSin.fillStyle = 'white';
+            ctxSin.font = '12px Arial';
+            ctxSin.fillText('SIN', endX + 10, endY);
+        }
+
+        sliderAngle.addEventListener('input', gambarSin);
+        gambarSin();
+
+        // BAGIAN COS
+        const canvasCos = document.getElementById('canvasCos');
+        const ctxCos = canvasCos.getContext('2d');
+        const sliderAngleCos = document.getElementById('sliderAngleCos');
+        
+        function gambarCos() {
+            const angle = parseInt(sliderAngleCos.value);
+            const radians = angle * Math.PI / 180;
+            const cosValue = Math.cos(radians);
+            
+            document.getElementById('labelAngleCos').textContent = angle;
+            document.getElementById('nilaiAngleCos').textContent = angle;
+            document.getElementById('hasilCos').textContent = cosValue.toFixed(3);
+            
+            if (angle === 0) {
+                document.getElementById('penjelasanCos').textContent = "Cos(0) = 1 - Bola maju PENUH ke depan";
+            } else if (Math.abs(angle) === 90) {
+                document.getElementById('penjelasanCos').textContent = "Cos(90) = 0 - Bola TIDAK maju (hanya samping)";
+            } else {
+                const kecepatan = (cosValue * 100).toFixed(0);
+                document.getElementById('penjelasanCos').textContent = "Cos(" + angle + ") = " + cosValue.toFixed(3) + " - Bola maju " + kecepatan + "%";
+            }
+
+            ctxCos.clearRect(0, 0, 250, 250);
+            
+            // Garis Y (arah maju)
+            ctxCos.beginPath();
+            ctxCos.moveTo(125, 45);
+            ctxCos.lineTo(125, 205);
+            ctxCos.strokeStyle = '#00ff00';
+            ctxCos.lineWidth = 3;
+            ctxCos.stroke();
+            
+            // Panah maju
+            ctxCos.beginPath();
+            ctxCos.moveTo(125, 45);
+            ctxCos.lineTo(120, 55);
+            ctxCos.lineTo(130, 55);
+            ctxCos.closePath();
+            ctxCos.fillStyle = '#00ff00';
+            ctxCos.fill();
+            
+            // Garis miring
+            const endX = 125 + Math.sin(radians) * 80;
+            const endY = 125 - Math.cos(radians) * 80;
+            
+            ctxCos.beginPath();
+            ctxCos.moveTo(125, 125);
+            ctxCos.lineTo(endX, endY);
+            ctxCos.strokeStyle = '#e94560';
+            ctxCos.lineWidth = 3;
+            ctxCos.stroke();
+            
+            // Komponen Y
+            ctxCos.beginPath();
+            ctxCos.moveTo(endX, 125);
+            ctxCos.lineTo(endX, endY);
+            ctxCos.strokeStyle = '#00ff00';
+            ctxCos.lineWidth = 3;
+            ctxCos.stroke();
+            
+            ctxCos.fillStyle = '#00ff00';
+            ctxCos.font = 'bold 14px Arial';
+            ctxCos.fillText('COS = ' + cosValue.toFixed(2), endX + 10, (125 + endY) / 2);
+        }
+
+        sliderAngleCos.addEventListener('input', gambarCos);
+        gambarCos();
+
+        // SIMULASI PELURU
+        const canvasGame = document.getElementById('canvasGame');
+        const ctxGame = canvasGame.getContext('2d');
+        
+        let peluruList = [];
+        let angleSimulasi = 0;
+
+        function updateSimulasi() {
+            for (let i = peluruList.length - 1; i >= 0; i--) {
+                const p = peluruList[i];
+                const radians = p.angle * Math.PI / 180;
+                
+                p.x += Math.sin(radians) * p.speed;
+                p.y -= Math.cos(radians) * p.speed;
+                
+                if (p.y < -20 || p.x < -20 || p.x > 620) {
+                    peluruList.splice(i, 1);
+                }
+            }
+        }
+
+        function drawSimulasi() {
+            ctxGame.clearRect(0, 0, 600, 300);
+            
+            // Garis panduan
+            ctxGame.strokeStyle = '#333';
+            ctxGame.setLineDash([5, 5]);
+            ctxGame.beginPath();
+            ctxGame.moveTo(300, 150);
+            ctxGame.lineTo(300, 0);
+            ctxGame.stroke();
+            ctxGame.setLineDash([]);
+            
+            // Pesawat
+            ctxGame.save();
+            ctxGame.translate(300, 200);
+            ctxGame.rotate(angleSimulasi * Math.PI / 180);
+            ctxGame.fillStyle = '#00d4ff';
+            ctxGame.fillRect(-20, -25, 40, 50);
+            ctxGame.restore();
+            
+            // Peluru
+            ctxGame.fillStyle = '#e94560';
+            for (const p of peluruList) {
+                ctxGame.beginPath();
+                ctxGame.arc(p.x, p.y, 5, 0, Math.PI * 2);
+                ctxGame.fill();
+            }
+            
+            // Info
+            ctxGame.fillStyle = 'white';
+            ctxGame.font = '16px Arial';
+            ctxGame.fillText('Angle: ' + angleSimulasi, 10, 25);
+            
+            requestAnimationFrame(function() {
+                updateSimulasi();
+                drawSimulasi();
+            });
+        }
+
+        sliderAngle.addEventListener('input', function() {
+            angleSimulasi = parseInt(sliderAngle.value);
+        });
+        sliderAngleCos.addEventListener('input', function() {
+            angleSimulasi = parseInt(sliderAngleCos.value);
+        });
+
+        document.getElementById('btnTembak').addEventListener('click', function() {
+            peluruList.push({
+                x: 300,
+                y: 180,
+                angle: angleSimulasi,
+                speed: 8
+            });
+        });
+
+        document.getElementById('btnReset').addEventListener('click', function() {
+            peluruList = [];
+        });
+
+        window.addEventListener('keydown', function(e) {
+            if (e.key === ' ') {
+                e.preventDefault();
+                peluruList.push({
+                    x: 300,
+                    y: 180,
+                    angle: angleSimulasi,
+                    speed: 8
+                });
+            }
+        });
+
+        drawSimulasi();
+
+    </script>
+</body>
+</html>
+
