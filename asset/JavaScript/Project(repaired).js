@@ -47,7 +47,7 @@ class Pemain {
         this.kondisi = 0;
         this.mutar = 0;
         this.input = this.draw()
-        this.radian = this.mutar * (Math.PI / 180)
+        this.radian = 0
     };
 
     // update
@@ -57,17 +57,27 @@ class Pemain {
         // if (click.down) this.y += this.speed;
         // if (click.right) this.x += this.speed;
         // if (click.left) this.x -= this.speed;
-        if (click.up) this.y -= Math.cos(this.radian) * this.speed;
-        if (click.down) this.y += Math.cos(this.radian) * this.speed;
+
+         //mutar
+        
+         if (click.right) this.mutar += 3;
+        else if (click.left) this.mutar -= 3;
+        this.radian = this.mutar * (Math.PI / 180)
+        if (click.up) {
+            this.y -= Math.cos(this.radian) * this.speed;
+            this.x += Math.sin(this.radian) * this.speed;
+        }
+        if (click.down) {
+            this.y += Math.cos(this.radian) * this.speed;
+            this.x -= Math.sin(this.radian) * this.speed
+        }
         if (click.right) this.x -= Math.sin(this.radian) * this.speed;
         if (click.right) this.x += Math.sin(this.radian) * this.speed; 
         if (this.waktuKebal > 0) this.waktuKebal--;
         if (nyawa > 3) this.kondisi = 0;
         if (nyawa === 3) this.kondisi = 1;
         if (nyawa === 1) this.kondisi = 2;
-        //mutar
-        if (click.right) this.mutar += 3;
-        else if (click.left) this.mutar -= 3;
+       
         this.clamp()
     };
 
