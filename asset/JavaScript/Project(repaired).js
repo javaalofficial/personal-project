@@ -133,7 +133,8 @@ class Peluru {
         this.speed = 15;
         this.picture = new Image()
         this.picture.src = 'asset/PNG/Lasers/laserBlue01.png'
-        this.radian = pemain.mutar * (Math.PI / 180)
+        this.radian = pemain.mutar * (Math.PI / 180) 
+        this.mutar = 0
     }
     terbaru(){
         this.y -= Math.cos(this.radian) * this.speed;
@@ -141,7 +142,11 @@ class Peluru {
         this.x += Math.sin(this.radian) * this.speed
     }
     draw(){
+        drawing.save()
+        drawing.translate(canvas.width /2 + this.x,canvas.height / 2 - this.y)
+        drawing.rotate(this.radian)
         drawing.drawImage(this.picture, this.x, this.y, this.w, this.h)
+        drawing.restore()
     }
 }
 
@@ -256,7 +261,6 @@ function jumlahnyaMusuh() {
                 GAME = false;
                 alert ('game over, skormu = ' + skorPemain);
                 resetGame();
-                GAME = true;
                 return;
             }
         } else if (jumlahMusuh[m].y > canvas.height){
